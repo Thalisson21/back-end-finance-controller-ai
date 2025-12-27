@@ -19,4 +19,23 @@ model User {
   email     String @unique
   password  String
   createdAt DateTime @default(now())
+
+  categories Category[]
 }
+
+enum CategoryType {
+  INCOME
+  EXPENSE
+}
+
+model Category {
+  id        String       @id @default(uuid())
+  name      String
+  type      CategoryType
+
+  userId    String
+  user      User         @relation(fields: [userId], references: [id])
+
+  createdAt DateTime     @default(now())
+}
+

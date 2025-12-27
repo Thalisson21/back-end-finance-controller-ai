@@ -21,6 +21,10 @@ export class UsersService {
     return result;
     }
 
+    async getProfile(){
+        return
+    }
+
    async findAll() {
     return this.prisma.user.findMany({
             select: {
