@@ -7,7 +7,7 @@ import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 @Controller('categories')
 export class CategoriesController {
   constructor(private readonly categoriesService: CategoriesService) {}
-
+  
   @Post()
   create(@Request() req, @Body() dto: CreateCategoryDto) {
     return this.categoriesService.create(req.user.sub, dto);

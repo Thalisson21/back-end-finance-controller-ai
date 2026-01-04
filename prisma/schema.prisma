@@ -21,6 +21,10 @@ model User {
   createdAt DateTime @default(now())
 
   categories Category[]
+  transactions Transaction[]
+  categoryLimits  CategoryLimit[]
+  spendingAlerts SpendingAlert[]
+
 }
 
 enum CategoryType {
@@ -37,5 +41,56 @@ model Category {
   user      User         @relation(fields: [userId], references: [id])
 
   createdAt DateTime     @default(now())
+
+  transactions Transaction[]
+  categoryLimits CategoryLimit[]
+  spendingAlerts SpendingAlert[]
 }
+
+model Transaction {
+  id          String    @id @default(uuid())
+  amount      Decimal
+  description String?
+  date        DateTime
+
+  userId      String
+  user        User      @relation(fields: [userId], references: [id])
+
+  categoryId  String
+  category    Category  @relation(fields: [categoryId], references: [id])
+
+  createdAt   DateTime  @default(now())
+}
+
+model CategoryLimit {
+  id         String   @id @default(uuid())
+  amount     Decimal
+  month      Int
+  year       Int
+
+  userId     String
+  categoryId String
+
+  user       User     @relation(fields: [userId], references: [id])
+  category   Category @relation(fields: [categoryId], references: [id])
+
+  @@unique([userId, categoryId, month, year])
+}
+
+
+model SpendingAlert {
+  id           String   @id @default(uuid())
+  userId       String
+  categoryId   String
+
+  limitAmount  Decimal
+  spentAmount  Decimal
+  percentage   Int
+
+  createdAt    DateTime @default(now())
+
+  user     User     @relation(fields: [userId], references: [id])
+  category Category @relation(fields: [categoryId], references: [id])
+}
+
 
